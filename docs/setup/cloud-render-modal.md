@@ -10,6 +10,9 @@ npm run render:cloud -- --comp ObjectSegmentation --hq
 
 - Working tree is clean and pushed (cloud render resolves by git SHA).
 - Modal auth and required secrets are configured.
+- The wrapper uses the sibling WIN checkout's `venv/bin/python` when present,
+  otherwise `python3` must have the Modal SDK. WIN owns the `aip-processor`
+  runtime under `modal_runtime/`; the app and function names are unchanged.
 - The target composition must not depend on ignored local runtime media.
   Active cloud-safe projects should keep runtime assets in `assets.js` as
   remote URLs.

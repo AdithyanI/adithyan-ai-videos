@@ -61,8 +61,8 @@ if (shaRes.status !== 0) {
 const gitSha = String(shaRes.stdout || '').trim();
 if (!gitSha) die('Failed to determine git SHA');
 
-const modalRepoDir = path.resolve('..', 'modal_functions');
-const modalPythonCandidate = path.join(modalRepoDir, 'venv', 'bin', 'python');
+const winRepoDir = path.resolve('..', 'win');
+const modalPythonCandidate = path.join(winRepoDir, 'venv', 'bin', 'python');
 const modalPython = fs.existsSync(modalPythonCandidate) ? modalPythonCandidate : 'python3';
 const invoker = path.resolve('scripts', 'render_cloud_deployed.py');
 
