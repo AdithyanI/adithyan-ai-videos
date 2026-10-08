@@ -1,3 +1,3 @@
 # Managed by ~/GitHub/agents/codex/scripts/sync-repo-codex-configs.sh.
-# Edit ~/GitHub/agents/codex/config/repo-bootstrap.json and re-run the sync script.
+# Edit ~/GitHub/agents/repos/registry.json and re-run the sync script.
 # No repo-local Codex overrides are currently assigned.
