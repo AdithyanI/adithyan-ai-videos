@@ -7,6 +7,6 @@ echo "[check:full] running repo doctor"
 node scripts/doctor.mjs
 
 echo "[check:full] verifying Remotion compositions compile"
-node scripts/remotion_cli.mjs compositions src/index.js >/dev/null
+node scripts/check_compositions.mjs >/dev/null
 
 echo "[check:full] passed"

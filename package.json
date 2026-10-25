@@ -9,6 +9,7 @@
     "studio:cached": "node scripts/studio_cached.mjs",
     "render": "node scripts/render.mjs",
     "render:cloud": "node scripts/render_cloud.mjs",
+    "setup:cloud": "python3 scripts/setup_cloud.py",
     "new:project": "node scripts/new_project.mjs",
     "media:status": "node scripts/media_storage.mjs status",
     "media:check": "node scripts/media_storage.mjs check",

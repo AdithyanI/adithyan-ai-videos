@@ -9,6 +9,8 @@
   preview slice for iteration.
 - `npm run render -- --comp <CompositionId> --hq --out tmp/<CompositionId>-hq.mp4 --no-open`:
   render a local high-quality checkpoint.
+- `npm run setup:cloud`: install the optional pinned Python client in this
+  repository's `.venv`; see `docs/setup/cloud-render-modal.md` for prerequisites.
 - `npm run render:cloud -- --comp <CompositionId>`: submit a production cloud
   render through the deployed Modal app and wait for the final URL.
 - `npm run new:project -- --id <project-id> --title "My Video"`: scaffold both
@@ -31,7 +33,10 @@
   - merge conflict markers in staged files
   - invalid staged JSON
   - `npm run doctor`
-  - `node scripts/remotion_cli.mjs compositions src/index.js`
+  - `node scripts/check_compositions.mjs`
+- Compilation uses a temporary empty public directory so checks do not traverse
+  the external media library. Render verification still owns media availability;
+  this check compiles source and evaluates composition metadata only.
 
 ## Execution Notes
 

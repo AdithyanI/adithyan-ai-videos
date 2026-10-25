@@ -2,6 +2,9 @@
 import {spawn, spawnSync} from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+
+const repoRoot = fileURLToPath(new URL('../', import.meta.url));
 
 const die = (msg) => {
   // eslint-disable-next-line no-console
@@ -39,6 +42,7 @@ Usage:
                        [--storage-prefix <share|cache|permanent>] (default: cache)
 
 Notes:
+  - Run 'npm run setup:cloud' once to install the repo-owned Python client.
   - Requires Modal auth and the deployed 'aip-processor' app.
   - Render is by git SHA: working tree must be clean and pushed.
   - Invokes the deployed Modal function directly, not 'modal run -d'.
@@ -46,7 +50,12 @@ Notes:
   process.exit(0);
 }
 
-const gitClean = spawnSync('git', ['status', '--porcelain=v1'], {encoding: 'utf8'});
+const modalPython = path.join(repoRoot, '.venv', process.platform === 'win32' ? 'Scripts/python.exe' : 'bin/python');
+if (!fs.existsSync(modalPython)) {
+  die('Cloud Python environment is missing. Run npm run setup:cloud in the video repository.');
+}
+
+const gitClean = spawnSync('git', ['status', '--porcelain=v1'], {cwd: repoRoot, encoding: 'utf8'});
 if (gitClean.status !== 0) {
   die(gitClean.stderr || 'Failed to check git status');
 }
@@ -54,19 +63,17 @@ if ((gitClean.stdout || '').trim().length > 0) {
   die('Working tree is dirty. Commit + push before cloud rendering (render is by git SHA).');
 }
 
-const shaRes = spawnSync('git', ['rev-parse', 'HEAD'], {encoding: 'utf8'});
+const shaRes = spawnSync('git', ['rev-parse', 'HEAD'], {cwd: repoRoot, encoding: 'utf8'});
 if (shaRes.status !== 0) {
   die(shaRes.stderr || 'Failed to get git SHA');
 }
 const gitSha = String(shaRes.stdout || '').trim();
 if (!gitSha) die('Failed to determine git SHA');
 
-const winRepoDir = path.resolve('..', 'win');
-const modalPythonCandidate = path.join(winRepoDir, 'venv', 'bin', 'python');
-const modalPython = fs.existsSync(modalPythonCandidate) ? modalPythonCandidate : 'python3';
-const invoker = path.resolve('scripts', 'render_cloud_deployed.py');
+const invoker = path.join(repoRoot, 'scripts', 'render_cloud_deployed.py');
 
 const args = [
+  '-I',
   invoker,
   '--git-sha',
   gitSha,
@@ -91,7 +98,10 @@ const callIdRe = /\bfc-[A-Za-z0-9]+\b/;
 const dashboardUrlRe = /(https:\/\/modal\.com\/apps\/\S+)/;
 const urlRe = /(https?:\/\/\S+?\.mp4)\b/;
 
-const runProc = spawn(modalPython, args, {cwd: process.cwd(), stdio: ['ignore', 'pipe', 'pipe']});
+const runProc = spawn(modalPython, args, {cwd: repoRoot, stdio: ['ignore', 'pipe', 'pipe']});
+runProc.on('error', (error) => {
+  die(`Could not start the cloud Python client: ${error.message}. Run npm run setup:cloud to repair it.`);
+});
 
 const onChunk = (chunk) => {
   const text = String(chunk || '');

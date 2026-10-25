@@ -1,18 +1,36 @@
 # Cloud Render (Modal)
 
-## Command
+## Setup and command
+
+With Python 3.11–3.14 installed (`3.13` recommended), run:
 
 ```bash
-npm run render:cloud -- --comp ObjectSegmentation --hq
+npm run setup:cloud
+npm run render:cloud -- --comp PaperPortal
 ```
+
+Setup recreates this repository's disposable, ignored `.venv`, installs the pinned client and
+transitive dependencies from `requirements-cloud.txt`, and checks the installation.
+Rerun it after changing the dependency pins or replacing the machine's Python.
+It is safe to rerun; local rendering and `npm install` do not require this setup.
+
+The launcher always uses `.venv` with Python's isolated mode, so another
+environment's `PYTHONPATH` cannot supply its packages. It resolves paths from the
+script's location. Neither a sibling WIN checkout nor a globally installed Modal
+package is needed. Existing machine Modal authentication is reused; setup does
+not create or copy credentials. On an unenrolled machine, follow the shared
+credential setup before submitting a render.
 
 ## Preconditions
 
 - Working tree is clean and pushed (cloud render resolves by git SHA).
 - Modal auth and required secrets are configured.
-- The wrapper uses the sibling WIN checkout's `venv/bin/python` when present,
-  otherwise `python3` must have the Modal SDK. WIN owns the `aip-processor`
-  runtime under `modal_runtime/`; the app and function names are unchanged.
+- WIN still owns the deployed `aip-processor / render_remotion_cloud` service.
+  This repository owns only its local client environment; no backend deployment
+  is needed for client setup.
+- Pass an enabled composition from `src/projects/registry.js` with `--comp`.
+  Cloud rendering defaults to HQ; use `--preview` for the preview preset. See
+  `npm run render:cloud -- --help` for optional controls.
 - The target composition must not depend on ignored local runtime media.
   Active cloud-safe projects should keep runtime assets in `assets.js` as
   remote URLs.
@@ -24,11 +42,9 @@ npm run render:cloud -- --comp ObjectSegmentation --hq
 
 - Use local preview slices before cloud HQ renders.
 - Keep cloud renders for stable checkpoints, not tight iteration.
-- `npm run render:cloud` now invokes the deployed `aip-processor` Modal app
-  directly via `modal.Function.from_name(...)`. It no longer uses
-  `modal run -d`, so cloud renders show up as function calls on the persistent
-  deployed app instead of detached ephemeral apps.
-- The repo cloud wrapper now waits internally and emits heartbeat status lines
+- `npm run render:cloud` invokes the deployed Modal function directly via
+  `modal.Function.from_name(...)` and records the call on the persistent app.
+- The repo cloud wrapper waits internally and emits heartbeat status lines
   while the render is running. The command returns the final URL when the cloud
   render completes.
 - Cloud renders default to lifecycle-managed `cache/`. Pass
@@ -38,22 +54,7 @@ npm run render:cloud -- --comp ObjectSegmentation --hq
   `/cache/win-remotion-assets` working cache. Cache hits refresh their age, and
   the shared daily Modal cleanup removes inputs unused for 72 hours. Missing
   inputs are downloaded again automatically on the next render.
-- Current backend tuning is calibrated against `ObjectSegmentation` on a representative
-  `72s -> 88s` slice:
-  - currently deployed worker reservation: `32` CPU cores, `65536` MB memory
-  - default auto concurrency target: `28`
-  - benchmark results:
-    - `16x`: about `135.04s`
-    - `20x`: about `122.72s`
-    - `24x`: about `124.09s`
-    - `28x`: about `113.00s`
-    - `32x`: about `118.25s`
-- A later fair comparison on the same pushed SHA showed that `64 CPU / 64 GiB /
-  28x` was faster (`97s`) than `32 CPU / 64 GiB / 28x` (`106s`).
-- The deployed app is currently kept at `32 CPU` by user preference, but if
-  the priority shifts back to raw speed, move the worker reservation back to
-  `64 CPU / 64 GiB` while keeping `28x` concurrency.
-- Noisy “Detected differing memory amounts” lines come from Remotion inside the
-  cloud container. They are useful to notice, but they were not the root cause
-  of the earlier `ObjectSegmentation` failures. The real blocker was local-only runtime
-  media in the composition path.
+- CPU, memory and automatic concurrency are owned by the deployed backend.
+  Inspect that configuration before tuning; old composition benchmarks are not
+  a contract for the current worker. The recorded user preference is a 32-CPU
+  worker; backend tuning is separate from this client setup.

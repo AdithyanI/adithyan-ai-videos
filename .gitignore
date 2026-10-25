@@ -8,6 +8,9 @@ public/
 tmp/
 /.tmp/
 /temp/
+.venv/
+__pycache__/
+*.pyc
 
 # local asset cache (default is ~/.cache/win-remotion-assets, but keep safe)
 *.mp4
