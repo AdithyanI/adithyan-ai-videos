@@ -16,7 +16,7 @@ It is safe to rerun; local rendering and `npm install` do not require this setup
 
 The launcher always uses `.venv` with Python's isolated mode, so another
 environment's `PYTHONPATH` cannot supply its packages. It resolves paths from the
-script's location. Neither a sibling WIN checkout nor a globally installed Modal
+script's location. Neither a sibling AI Podcasting checkout nor a globally installed Modal
 package is needed. Existing machine Modal authentication is reused; setup does
 not create or copy credentials. On an unenrolled machine, follow the shared
 credential setup before submitting a render.
@@ -25,7 +25,7 @@ credential setup before submitting a render.
 
 - Working tree is clean and pushed (cloud render resolves by git SHA).
 - Modal auth and required secrets are configured.
-- WIN still owns the deployed `aip-processor / render_remotion_cloud` service.
+- AI Podcasting still owns the deployed `aip-processor / render_remotion_cloud` service.
   This repository owns only its local client environment; no backend deployment
   is needed for client setup.
 - Pass an enabled composition from `src/projects/registry.js` with `--comp`.
