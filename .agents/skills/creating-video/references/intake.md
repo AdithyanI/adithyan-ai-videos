@@ -8,7 +8,7 @@ through implementation and rendered proof.
 
 ## When transcription is needed
 
-First check `$media-toolkit` for media-processing work in this repo. It should usually be the default surface for transcription and other media jobs when it supports what you need.
+First check the `media-toolkit` skill for media-processing work in this repo. It should usually be the default surface for transcription and other media jobs when it supports what you need.
 
 Command:
 
@@ -24,7 +24,7 @@ Notes:
   - `text`
   - `words` (normalized word timings)
   - `sentences`
-- For local source media, first check whether `$media-toolkit` supports the direct file path you have.
+- For local source media, first check whether the `media-toolkit` skill supports the direct file path you have.
 - For code-first Remotion projects, prefer committing a thin words-only artifact inside the project:
   - `src/projects/<project-id>/transcript_words.json` (usually copied from `transcript.json.words`)
 
@@ -43,7 +43,7 @@ Outputs:
 
 If iteration is slow (matting, Studio playback, remote fetch), it’s ok to work off a smaller proxy video.
 
-- First check `$media-toolkit` for transform support before reaching for lower-level backend internals.
+- First check the `media-toolkit` skill for transform support before reaching for lower-level backend internals.
 - Persist the transform output JSON under the project folder (e.g. `projects/<project-id>/transform_720p.json`).
 - While iterating, point your composition’s `VIDEO_URL` (usually in `src/projects/<project-id>/assets.js`) to the transform `output_url`.
 - Keep the original source URL referenced in the transform JSON (`input_url`) for later “final” exports.
@@ -54,7 +54,7 @@ If/when occlusion is needed, you want a **real alpha asset** (typically `alpha.w
 
 Workflow:
 
-- First check `$media-toolkit` for a matting path. If it does not cover the case, then drop lower into the backend-specific workflow.
+- First check the `media-toolkit` skill for a matting path. If it does not cover the case, then drop lower into the backend-specific workflow.
 - Paste the resulting `alpha.webm` URL into `src/projects/<project-id>/assets.js` (code-first).
 
 Notes:

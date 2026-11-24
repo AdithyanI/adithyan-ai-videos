@@ -26,8 +26,8 @@ new spending and publication within the user's authorized scope.
 - For cloud delivery, runtime inputs must be reachable from cloud. Preserve local
   source media separately; an asset URL must have the retention needed by the
   composition. See `docs/references/media-storage.md` before promoting media.
-- Use `$media-toolkit` when it covers a needed transcription/transform/matting
-  operation. Use the installed `$remotion` skill for unfamiliar Remotion APIs.
+- Use the `media-toolkit` skill when it covers a needed transcription/transform/matting
+  operation. Use the installed `remotion` skill for unfamiliar Remotion APIs.
 
 ## Read only for the affected work
 

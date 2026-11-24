@@ -1,6 +1,6 @@
 ---
 name: omni-flash-video
-description: Plan, prompt, and review Gemini Omni Flash / Google Flow video generations, especially reference-image or short stitched video sequences. Use when Codex needs to prepare Omni Flash prompts, choose Flow settings, design start/end frame workflows, split a story into short clips, build portal/door style transitions, or evaluate Omni/Flow outputs for continuity and next-step prompting.
+description: Plan, prompt, and review Gemini Omni Flash / Google Flow video generations, especially reference-image or short stitched video sequences. Use when preparing Omni Flash prompts, choosing Flow settings, designing start/end frame workflows, splitting a story into short clips, building portal/door style transitions, or evaluating Omni/Flow outputs for continuity and next-step prompting.
 ---
 
 # Omni Flash Video
